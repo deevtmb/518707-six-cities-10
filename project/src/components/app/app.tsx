@@ -1,5 +1,13 @@
-function App(): JSX.Element {
-  return <p>Hello, world!</p>;
+import MainScreen from '../../pages/main-screen/main-screen';
+
+type AppScreenProps = {
+  availablePlacesCount: number;
+}
+
+function App({availablePlacesCount}: AppScreenProps): JSX.Element {
+  return (
+    <MainScreen availablePlacesCount={availablePlacesCount} />
+  );
 }
 
 export default App;
