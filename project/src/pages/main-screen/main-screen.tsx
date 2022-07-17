@@ -1,11 +1,15 @@
+import {Offer} from '../../types/offer';
+import {AppRoute} from '../../const';
+import {Link} from 'react-router-dom';
 import Logo from '../../components/logo/logo';
-import PlaceCard from '../../components/place-card/place-card';
+import PlacesList from '../../components/places-list/places-list';
 
 type MainScreenProps = {
   availablePlacesCount: number;
+  offersList: Offer[];
 };
 
-export default function MainScreen({availablePlacesCount}: MainScreenProps): JSX.Element {
+export default function MainScreen({availablePlacesCount, offersList}: MainScreenProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -21,7 +25,9 @@ export default function MainScreen({availablePlacesCount}: MainScreenProps): JSX
                     <div className="header__avatar-wrapper user__avatar-wrapper">
                     </div>
                     <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    <span className="header__favorite-count">3</span>
+                    <Link to={AppRoute.Favorites}>
+                      <span className="header__favorite-count">3</span>
+                    </Link>
                   </a>
                 </li>
                 <li className="header__nav-item">
@@ -93,13 +99,7 @@ export default function MainScreen({availablePlacesCount}: MainScreenProps): JSX
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <div className="cities__places-list places__list tabs__content">
-                <PlaceCard />
-                <PlaceCard />
-                <PlaceCard />
-                <PlaceCard />
-                <PlaceCard />
-              </div>
+              <PlacesList offersList={offersList} />
             </section>
             <div className="cities__right-section">
               <section className="cities__map map"></section>
