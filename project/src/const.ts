@@ -1,3 +1,14 @@
+type Dictionary = {
+  [key: string]: string;
+}
+
+export const OFFER_TYPES_MAP: Dictionary = {
+  apartment: 'Apartment',
+  room: 'Private Room',
+  house: 'House',
+  hotel: 'Hotel'
+};
+
 export enum AppRoute {
   Main = '/',
   Login = '/login',
