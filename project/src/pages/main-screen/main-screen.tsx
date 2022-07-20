@@ -3,6 +3,7 @@ import {AppRoute} from '../../const';
 import {Link} from 'react-router-dom';
 import Logo from '../../components/logo/logo';
 import PlacesList from '../../components/places-list/places-list';
+import Map from '../../components/map/map';
 
 type MainScreenProps = {
   availablePlacesCount: number;
@@ -102,7 +103,7 @@ export default function MainScreen({availablePlacesCount, offersList}: MainScree
               <PlacesList offersList={offersList} />
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <Map city={offersList[0].city} offers={offersList} />
             </div>
           </div>
         </div>
