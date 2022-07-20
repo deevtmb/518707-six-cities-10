@@ -11,8 +11,8 @@ type MapProps = {
 
 const defaultIcon = new Icon({
   iconUrl: 'img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40]
+  iconSize: [27, 39],
+  iconAnchor: [13.5, 39]
 });
 
 export default function Map({city, offers}: MapProps): JSX.Element {
@@ -32,5 +32,5 @@ export default function Map({city, offers}: MapProps): JSX.Element {
     }
   }, [map, offers]);
 
-  return <section className="cities__map map" id="map" ref={mapRef}></section>;
+  return <section className="cities__map map" ref={mapRef}></section>;
 }
