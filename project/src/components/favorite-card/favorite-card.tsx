@@ -1,6 +1,7 @@
 import {Offer} from '../../types/offer';
 import {OFFER_TYPES_MAP, AppRoute} from '../../const';
 import {Link} from 'react-router-dom';
+import {getRatingStarWidth} from '../../utils';
 
 type FavoriteCardProps = {
   key: number;
@@ -8,9 +9,6 @@ type FavoriteCardProps = {
 }
 
 export default function FavoriteCard({key, offer}: FavoriteCardProps): JSX.Element {
-  const STAR_WIDTH = 20;
-  const ratingStarsWidth = `${STAR_WIDTH * Math.round(offer.rating)}%`;
-
   return (
     <article key={key} className="favorites__card place-card">
       <div className="favorites__image-wrapper place-card__image-wrapper">
@@ -33,7 +31,7 @@ export default function FavoriteCard({key, offer}: FavoriteCardProps): JSX.Eleme
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: ratingStarsWidth}}></span>
+            <span style={{width: getRatingStarWidth(offer.rating)}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

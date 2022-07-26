@@ -1,19 +1,28 @@
 import {useState} from 'react';
 import {Offer} from '../../types/offer';
+import {PLACES_LIST_CLASSES} from '../../const';
 import {MouseEvent} from 'react';
 import PlaceCard from '../place-card/place-card';
 
 type PlacesListProps = {
-  offersList: Offer[]
+  offersList: Offer[];
+  placesType: string;
 }
 
-export default function PlacesList({offersList}: PlacesListProps): JSX.Element {
+export default function PlacesList({offersList, placesType}: PlacesListProps): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [activeOffer, setActiveOffer] = useState({});
 
   return (
-    <div className="cities__places-list places__list tabs__content">
-      {offersList.map((offer) => <PlaceCard key={offer.id} offer={offer} handlePlaceCardMouseOver={(evt: MouseEvent<HTMLElement>) => setActiveOffer(offer)} />)}
+    <div className={`places__list ${PLACES_LIST_CLASSES[placesType]}`}>
+      {offersList.map((offer) => (
+        <PlaceCard
+          key={offer.id}
+          offer={offer}
+          placeType={placesType}
+          handlePlaceCardMouseOver={(evt: MouseEvent<HTMLElement>) => setActiveOffer(offer)}
+        />
+      ))}
     </div>
   );
 }

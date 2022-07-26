@@ -11,6 +11,9 @@ type MainScreenProps = {
 };
 
 export default function MainScreen({availablePlacesCount, offersList}: MainScreenProps): JSX.Element {
+  const additionalMapClass = 'cities__map';
+  const placesType = 'cities';
+
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -100,10 +103,10 @@ export default function MainScreen({availablePlacesCount, offersList}: MainScree
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <PlacesList offersList={offersList} />
+              <PlacesList offersList={offersList} placesType={placesType} />
             </section>
             <div className="cities__right-section">
-              <Map city={offersList[0].city} offers={offersList} />
+              <Map city={offersList[0].city} offers={offersList} additionalClass={additionalMapClass} />
             </div>
           </div>
         </div>

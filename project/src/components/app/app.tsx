@@ -7,13 +7,15 @@ import PropertyScreen from '../../pages/property-screen/property-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import PrivateRoute from '../../components/private-route/private-route';
 import {Offer} from '../../types/offer';
+import {Review} from '../../types/review';
 
 type AppScreenProps = {
   availablePlacesCount: number;
   offersList: Offer[];
+  reviewsList: Review[];
 }
 
-export default function App({availablePlacesCount, offersList}: AppScreenProps): JSX.Element {
+export default function App({availablePlacesCount, offersList, reviewsList}: AppScreenProps): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
@@ -40,7 +42,7 @@ export default function App({availablePlacesCount, offersList}: AppScreenProps):
         />
         <Route
           path={AppRoute.Room}
-          element={<PropertyScreen />}
+          element={<PropertyScreen offers={offersList} reviews={reviewsList} />}
         />
         <Route
           path={AppRoute.NotFound}

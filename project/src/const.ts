@@ -9,6 +9,11 @@ export const OFFER_TYPES_MAP: Dictionary = {
   hotel: 'Hotel'
 };
 
+export const PLACES_LIST_CLASSES: Dictionary = {
+  'cities': 'cities__places-list tabs__content',
+  'near-places': 'near-places__list'
+};
+
 export enum AppRoute {
   Main = '/',
   Login = '/login',
