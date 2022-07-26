@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/app/app';
 import {offersList} from './mocks/offers';
+import {reviewsList} from './mocks/reviews';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -16,6 +17,7 @@ root.render(
     <App
       availablePlacesCount={Setting.AVAILABLE_PLACES_COUNT}
       offersList={offersList}
+      reviewsList={reviewsList}
     />
   </React.StrictMode>,
 );

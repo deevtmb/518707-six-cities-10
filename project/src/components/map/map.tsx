@@ -7,6 +7,7 @@ import 'leaflet/dist/leaflet.css';
 type MapProps = {
   city: City;
   offers: Offer[];
+  additionalClass: string;
 };
 
 const defaultIcon = new Icon({
@@ -15,7 +16,7 @@ const defaultIcon = new Icon({
   iconAnchor: [13.5, 39]
 });
 
-export default function Map({city, offers}: MapProps): JSX.Element {
+export default function Map({city, offers, additionalClass}: MapProps): JSX.Element {
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
 
@@ -32,5 +33,5 @@ export default function Map({city, offers}: MapProps): JSX.Element {
     }
   }, [map, offers]);
 
-  return <section className="cities__map map" ref={mapRef}></section>;
+  return <section className={`map ${additionalClass}`} ref={mapRef}></section>;
 }

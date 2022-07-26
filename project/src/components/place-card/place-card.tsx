@@ -2,24 +2,20 @@ import {Offer} from '../../types/offer';
 import {OFFER_TYPES_MAP, AppRoute} from '../../const';
 import {MouseEvent} from 'react';
 import {Link} from 'react-router-dom';
+import {getRatingStarWidth} from '../../utils';
 
 type PlaceCardProps = {
   key: number;
   offer: Offer;
+  placeType: string;
   handlePlaceCardMouseOver: (evt: MouseEvent<HTMLElement>) => void
 }
 
-export default function PlaceCard({key, offer, handlePlaceCardMouseOver}: PlaceCardProps): JSX.Element {
-  const STAR_WIDTH = 20;
-  const ratingStarsWidth = `${STAR_WIDTH * Math.round(offer.rating)}%`;
-
+export default function PlaceCard({key, offer, placeType, handlePlaceCardMouseOver}: PlaceCardProps): JSX.Element {
   return (
-    <article key={key} className="cities__card place-card" onMouseOver={handlePlaceCardMouseOver}>
-      {offer.isPremium ?
-        <div className="place-card__mark">
-          <span>Premium</span>
-        </div> : ''}
-      <div className="cities__image-wrapper place-card__image-wrapper">
+    <article key={key} className={`${placeType}__card place-card`} onMouseOver={handlePlaceCardMouseOver}>
+      {offer.isPremium && <div className="place-card__mark"><span>Premium</span></div>}
+      <div className={`${placeType}__image-wrapper place-card__image-wrapper`}>
         <a href="/">
           <img className="place-card__image" src={offer.previewImage} width="260" height="200" alt={offer.title} />
         </a>
@@ -39,7 +35,7 @@ export default function PlaceCard({key, offer, handlePlaceCardMouseOver}: PlaceC
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: ratingStarsWidth}}></span>
+            <span style={{width: getRatingStarWidth(offer.rating)}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
