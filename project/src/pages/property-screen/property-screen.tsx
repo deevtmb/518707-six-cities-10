@@ -1,8 +1,9 @@
-import {OFFER_TYPES_MAP,AppRoute} from '../../const';
+import {useState} from 'react';
+import {Link} from 'react-router-dom';
 import {Review} from '../../types/review';
 import {Offer} from '../../types/offer';
-import {Link} from 'react-router-dom';
 import Logo from '../../components/logo/logo';
+import {OFFER_TYPES_MAP,AppRoute} from '../../const';
 import ReviewForm from '../../components/review-form/review-form';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import PlacesList from '../../components/places-list/places-list';
@@ -19,6 +20,15 @@ export default function PropertyScreen({offers, reviews}: PropertyScreenProps): 
   const {host} = currentOffer;
   const additionalMapClass = 'property__map';
   const placesType = 'near-places';
+  const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
+
+  const onPlaceItemHover = (offer: Offer) => {
+    setActiveOffer(offer);
+  };
+
+  const onPlaceItemLeave = () => {
+    setActiveOffer(null);
+  };
 
   return (
     <div className="page">
@@ -134,12 +144,22 @@ export default function PropertyScreen({offers, reviews}: PropertyScreenProps): 
               </section>
             </div>
           </div>
-          <Map city={offers[0].city} offers={offers.slice(1)} additionalClass={additionalMapClass} />
+          <Map
+            city={offers[0].city}
+            offers={offers.slice(1)}
+            additionalClass={additionalMapClass}
+            activeOffer={activeOffer}
+          />
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
-            <PlacesList offersList={offers.slice(1)} placesType={placesType} />
+            <PlacesList
+              offersList={offers.slice(1)}
+              placesType={placesType}
+              onPlaceItemHover={onPlaceItemHover}
+              onPlaceItemLeave={onPlaceItemLeave}
+            />
           </section>
         </div>
       </main>

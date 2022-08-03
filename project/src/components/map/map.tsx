@@ -8,6 +8,7 @@ type MapProps = {
   city: City;
   offers: Offer[];
   additionalClass: string;
+  activeOffer?: Offer | null;
 };
 
 const defaultIcon = new Icon({
@@ -16,7 +17,13 @@ const defaultIcon = new Icon({
   iconAnchor: [13.5, 39]
 });
 
-export default function Map({city, offers, additionalClass}: MapProps): JSX.Element {
+const activeIcon = new Icon({
+  iconUrl: 'img/pin-active.svg',
+  iconSize: [27, 39],
+  iconAnchor: [13.5, 39]
+});
+
+export default function Map({city, offers, additionalClass, activeOffer}: MapProps): JSX.Element {
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
 
@@ -28,10 +35,12 @@ export default function Map({city, offers, additionalClass}: MapProps): JSX.Elem
           lng: offer.location.longitude
         });
 
-        marker.setIcon(defaultIcon).addTo(map);
+        marker.setIcon(
+          activeOffer !== null && activeOffer !== undefined && offer.id === activeOffer.id ? activeIcon : defaultIcon
+        ).addTo(map);
       });
     }
-  }, [map, offers]);
+  }, [map, offers, activeOffer]);
 
   return <section className={`map ${additionalClass}`} ref={mapRef}></section>;
 }
