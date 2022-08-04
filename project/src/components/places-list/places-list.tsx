@@ -1,4 +1,3 @@
-import {useState} from 'react';
 import {Offer} from '../../types/offer';
 import {PLACES_LIST_CLASSES} from '../../const';
 import {MouseEvent} from 'react';
@@ -7,12 +6,11 @@ import PlaceCard from '../place-card/place-card';
 type PlacesListProps = {
   offersList: Offer[];
   placesType: string;
+  onPlaceItemHover: (offer: Offer) => void;
+  onPlaceItemLeave: () => void;
 }
 
-export default function PlacesList({offersList, placesType}: PlacesListProps): JSX.Element {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [activeOffer, setActiveOffer] = useState({});
-
+export default function PlacesList({offersList, placesType, onPlaceItemHover, onPlaceItemLeave}: PlacesListProps): JSX.Element {
   return (
     <div className={`places__list ${PLACES_LIST_CLASSES[placesType]}`}>
       {offersList.map((offer) => (
@@ -20,7 +18,8 @@ export default function PlacesList({offersList, placesType}: PlacesListProps): J
           key={offer.id}
           offer={offer}
           placeType={placesType}
-          handlePlaceCardMouseOver={(evt: MouseEvent<HTMLElement>) => setActiveOffer(offer)}
+          placeItemHoverHandler={(evt: MouseEvent<HTMLElement>) => onPlaceItemHover(offer)}
+          placeItemLeaveHandler={(evt: MouseEvent<HTMLElement>) => onPlaceItemLeave()}
         />
       ))}
     </div>

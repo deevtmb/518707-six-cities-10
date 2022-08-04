@@ -22,6 +22,7 @@ export default function MainScreen({availablePlacesCount, offersList}: MainScree
 
   const [isSortListOpened, setSortListOpened] = useState(false);
   const [currentSortOption, setCurrentSortOption] = useState<string>(SortOption.Popular);
+  const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
 
   const sortOffers = (offers: Offer[]) => {
     switch (currentSortOption) {
@@ -35,6 +36,14 @@ export default function MainScreen({availablePlacesCount, offersList}: MainScree
   const onSortOptionClick = (sortOptionName: string) => {
     setCurrentSortOption(sortOptionName);
     setSortListOpened(false);
+  };
+
+  const onPlaceItemHover = (offer: Offer) => {
+    setActiveOffer(offer);
+  };
+
+  const onPlaceItemLeave = () => {
+    setActiveOffer(null);
   };
 
   return (
@@ -89,15 +98,23 @@ export default function MainScreen({availablePlacesCount, offersList}: MainScree
                     <use xlinkHref="#icon-arrow-select"></use>
                   </svg>
                 </span>
-                {isSortListOpened
-                  ? <SortOptions onSortOptionClick={onSortOptionClick} currentSortOption={currentSortOption} />
-                  : ''}
+                {isSortListOpened && <SortOptions onSortOptionClick={onSortOptionClick} currentSortOption={currentSortOption} />}
               </form>
-              <PlacesList offersList={sortOffers(currentOffers)} placesType={placesType} />
+              <PlacesList
+                offersList={sortOffers(currentOffers)}
+                placesType={placesType}
+                onPlaceItemHover={onPlaceItemHover}
+                onPlaceItemLeave={onPlaceItemLeave}
+              />
             </section>
 
             <div className="cities__right-section">
-              <Map city={currentOffers[0].city} offers={currentOffers} additionalClass={additionalMapClass} />
+              <Map
+                city={currentOffers[0].city}
+                offers={currentOffers}
+                additionalClass={additionalMapClass}
+                activeOffer={activeOffer}
+              />
             </div>
           </div>
         </div>
