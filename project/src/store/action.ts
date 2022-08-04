@@ -3,4 +3,6 @@ import {Offer} from '../types/offer';
 
 export const changeSelectedCity = createAction<{city: string}>('changeSelectedCity');
 
-export const getOffersList = createAction<{offers: Offer[]}>('getOffersList');
+export const loadOffers = createAction<Offer[]>('data/loadOffers');
+
+export const setDataLoadingStatus = createAction<boolean>('data/setDataLoadingStatus');

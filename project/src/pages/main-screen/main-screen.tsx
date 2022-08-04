@@ -9,16 +9,13 @@ import SortOptions from '../../components/sort-options/sort-options';
 import Map from '../../components/map/map';
 import {useAppSelector} from '../../hooks';
 
-type MainScreenProps = {
-  availablePlacesCount: number;
-  offersList: Offer[];
-};
-
-export default function MainScreen({availablePlacesCount, offersList}: MainScreenProps): JSX.Element {
+export default function MainScreen(): JSX.Element {
   const additionalMapClass = 'cities__map';
   const placesType = 'cities';
+
   const currentCity = useAppSelector((state) => state.city);
-  const currentOffers = offersList.filter((offer) => offer.city.name === currentCity);
+  const currentOffers = useAppSelector((state) => state.offers).filter((offer) => offer.city.name === currentCity);
+  const currentCityInfo = currentOffers[0].city;
 
   const [isSortListOpened, setSortListOpened] = useState(false);
   const [currentSortOption, setCurrentSortOption] = useState<string>(SortOption.Popular);
@@ -26,10 +23,10 @@ export default function MainScreen({availablePlacesCount, offersList}: MainScree
 
   const sortOffers = (offers: Offer[]) => {
     switch (currentSortOption) {
-      case SortOption.PriceToHigh: return [...currentOffers].sort((offerA, offerB) => offerA.price - offerB.price);
-      case SortOption.PriceToLow: return [...currentOffers].sort((offerA, offerB) => offerB.price - offerA.price);
-      case SortOption.TopRated: return [...currentOffers].sort((offerA, offerB) => offerB.rating - offerA.rating);
-      default: return currentOffers;
+      case SortOption.PriceToHigh: return [...offers].sort((offerA, offerB) => offerA.price - offerB.price);
+      case SortOption.PriceToLow: return [...offers].sort((offerA, offerB) => offerB.price - offerA.price);
+      case SortOption.TopRated: return [...offers].sort((offerA, offerB) => offerB.rating - offerA.rating);
+      default: return offers;
     }
   };
 
@@ -110,7 +107,7 @@ export default function MainScreen({availablePlacesCount, offersList}: MainScree
 
             <div className="cities__right-section">
               <Map
-                city={currentOffers[0].city}
+                city={currentCityInfo}
                 offers={currentOffers}
                 additionalClass={additionalMapClass}
                 activeOffer={activeOffer}

@@ -1,15 +1,13 @@
 import {Offer} from '../../types/offer';
 import {AppRoute} from '../../const';
 import {Link} from 'react-router-dom';
+import {useAppSelector} from '../../hooks';
 import Logo from '../../components/logo/logo';
 import FavoritesList from '../../components/favorites-list/favorites-list';
 
-type FavoritesScreenProps = {
-  offersList: Offer[];
-}
-
-export default function FavoritesScreen({offersList}: FavoritesScreenProps): JSX.Element {
-  const favoriteOffers = offersList.filter((offer) => offer.isFavorite);
+export default function FavoritesScreen(): JSX.Element {
+  const offers = useAppSelector((state) => state.offers);
+  const favoriteOffers = offers.filter((offer: Offer) => offer.isFavorite);
 
   return (
     <div className="page">

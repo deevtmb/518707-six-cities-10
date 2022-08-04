@@ -8,7 +8,7 @@ type MapProps = {
   city: City;
   offers: Offer[];
   additionalClass: string;
-  activeOffer?: Offer | null;
+  activeOffer: Offer | null;
 };
 
 const defaultIcon = new Icon({
@@ -36,11 +36,20 @@ export default function Map({city, offers, additionalClass, activeOffer}: MapPro
         });
 
         marker.setIcon(
-          activeOffer !== null && activeOffer !== undefined && offer.id === activeOffer.id ? activeIcon : defaultIcon
+          activeOffer !== null && offer.id === activeOffer.id ? activeIcon : defaultIcon
         ).addTo(map);
       });
     }
   }, [map, offers, activeOffer]);
+
+  useEffect(() => {
+    if (map) {
+      map.setView({
+        lat: city.location.latitude,
+        lng: city.location.longitude
+      }, city.location.zoom);
+    }
+  }, [city, offers, map]);
 
   return <section className={`map ${additionalClass}`} ref={mapRef}></section>;
 }

@@ -6,26 +6,30 @@ import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
 import PropertyScreen from '../../pages/property-screen/property-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import PrivateRoute from '../../components/private-route/private-route';
-import {Offer} from '../../types/offer';
 import {Review} from '../../types/review';
+import { useAppSelector } from '../../hooks';
+import LoadingLayout from '../loading-layout/loading-layout';
 
 type AppScreenProps = {
-  availablePlacesCount: number;
-  offersList: Offer[];
   reviewsList: Review[];
 }
 
-export default function App({availablePlacesCount, offersList, reviewsList}: AppScreenProps): JSX.Element {
+export default function App({reviewsList}: AppScreenProps): JSX.Element {
+  const isDataLoading = useAppSelector((state) => state.isDataLoading);
+
+  if (isDataLoading) {
+    return (
+      <LoadingLayout />
+    );
+  }
+
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path={AppRoute.Main}
           element={
-            <MainScreen
-              availablePlacesCount={availablePlacesCount}
-              offersList={offersList}
-            />
+            <MainScreen />
           }
         />
         <Route
@@ -36,13 +40,13 @@ export default function App({availablePlacesCount, offersList, reviewsList}: App
           path={AppRoute.Favorites}
           element={
             <PrivateRoute authorizationStatus={AuthorizationStatus.Authorized}>
-              <FavoritesScreen offersList={offersList} />
+              <FavoritesScreen />
             </PrivateRoute>
           }
         />
         <Route
           path={AppRoute.Room}
-          element={<PropertyScreen offers={offersList} reviews={reviewsList} />}
+          element={<PropertyScreen reviews={reviewsList} />}
         />
         <Route
           path={AppRoute.NotFound}

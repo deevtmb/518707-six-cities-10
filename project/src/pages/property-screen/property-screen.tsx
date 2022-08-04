@@ -9,13 +9,14 @@ import ReviewsList from '../../components/reviews-list/reviews-list';
 import PlacesList from '../../components/places-list/places-list';
 import Map from '../../components/map/map';
 import {getRatingStarWidth} from '../../utils';
+import {useAppSelector} from '../../hooks';
 
 type PropertyScreenProps = {
-  offers: Offer[];
   reviews: Review[];
 }
 
-export default function PropertyScreen({offers, reviews}: PropertyScreenProps): JSX.Element {
+export default function PropertyScreen({reviews}: PropertyScreenProps): JSX.Element {
+  const offers = useAppSelector((state) => state.offers);
   const currentOffer = offers[0];
   const {host} = currentOffer;
   const additionalMapClass = 'property__map';
