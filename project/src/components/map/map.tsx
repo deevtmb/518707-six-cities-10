@@ -42,5 +42,14 @@ export default function Map({city, offers, additionalClass, activeOffer}: MapPro
     }
   }, [map, offers, activeOffer]);
 
+  useEffect(() => {
+    if (map) {
+      map.setView({
+        lat: city.location.latitude,
+        lng: city.location.longitude
+      }, city.location.zoom);
+    }
+  }, [city, offers, map]);
+
   return <section className={`map ${additionalClass}`} ref={mapRef}></section>;
 }
