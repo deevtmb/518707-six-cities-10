@@ -35,4 +35,8 @@ export enum SortOption {
   TopRated = 'Top rated first',
 }
 
+export enum APIRoute {
+  Offers = '/hotels',
+}
+
 export const cities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'] as const;

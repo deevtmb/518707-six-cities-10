@@ -8,7 +8,7 @@ type MapProps = {
   city: City;
   offers: Offer[];
   additionalClass: string;
-  activeOffer?: Offer | null;
+  activeOffer: Offer | null;
 };
 
 const defaultIcon = new Icon({
@@ -36,7 +36,7 @@ export default function Map({city, offers, additionalClass, activeOffer}: MapPro
         });
 
         marker.setIcon(
-          activeOffer !== null && activeOffer !== undefined && offer.id === activeOffer.id ? activeIcon : defaultIcon
+          activeOffer !== null && offer.id === activeOffer.id ? activeIcon : defaultIcon
         ).addTo(map);
       });
     }
