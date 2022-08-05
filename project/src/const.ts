@@ -37,6 +37,7 @@ export enum SortOption {
 
 export enum APIRoute {
   Offers = '/hotels',
+  Login = '/login',
 }
 
 export const cities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'] as const;

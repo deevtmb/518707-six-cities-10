@@ -12,7 +12,7 @@ export default function CitiesList({currentCity}: CitiesListProps): JSX.Element 
   return (
     <ul className="locations__list tabs__list">
       {cities.map((city) => (
-        <li key={city} className="locations__item" onClick={() => dispatch(changeSelectedCity({city}))}>
+        <li key={city} className="locations__item" onClick={() => dispatch(changeSelectedCity(city))}>
           <Link className={`locations__item-link tabs__item ${city === currentCity ? 'tabs__item--active' : ''}`} to="">
             <span>{city}</span>
           </Link>

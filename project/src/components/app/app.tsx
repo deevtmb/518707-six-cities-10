@@ -1,4 +1,4 @@
-import {AppRoute, AuthorizationStatus} from '../../const';
+import {AppRoute} from '../../const';
 import MainScreen from '../../pages/main-screen/main-screen';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import LoginScreen from '../../pages/login-screen/login-screen';
@@ -39,7 +39,7 @@ export default function App({reviewsList}: AppScreenProps): JSX.Element {
         <Route
           path={AppRoute.Favorites}
           element={
-            <PrivateRoute authorizationStatus={AuthorizationStatus.Authorized}>
+            <PrivateRoute>
               <FavoritesScreen />
             </PrivateRoute>
           }
