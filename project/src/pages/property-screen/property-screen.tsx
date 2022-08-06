@@ -1,26 +1,29 @@
-import {useState} from 'react';
-import {Link} from 'react-router-dom';
-import {Review} from '../../types/review';
+import { useEffect, useState} from 'react';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import {Offer} from '../../types/offer';
 import Logo from '../../components/logo/logo';
-import {OFFER_TYPES_MAP,AppRoute} from '../../const';
+import {OFFER_TYPES_MAP,AppRoute, AuthorizationStatus} from '../../const';
 import ReviewForm from '../../components/review-form/review-form';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import PlacesList from '../../components/places-list/places-list';
 import Map from '../../components/map/map';
 import {getRatingStarWidth} from '../../utils';
-import {useAppSelector} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import { fetchCurrentOfferInfoAction, fetchCurrentOfferReviewsAction, fetchNearbyOffersAction } from '../../store/api-actions';
+import NotFoundScreen from '../not-found-screen/not-found-screen';
+import LoadingLayout from '../../components/loading-layout/loading-layout';
 
-type PropertyScreenProps = {
-  reviews: Review[];
-}
-
-export default function PropertyScreen({reviews}: PropertyScreenProps): JSX.Element {
-  const offers = useAppSelector((state) => state.offers);
-  const currentOffer = offers[0];
-  const {host} = currentOffer;
+export default function PropertyScreen(): JSX.Element {
   const additionalMapClass = 'property__map';
   const placesType = 'near-places';
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const {id} = useParams();
+  const currentOffer = useAppSelector((state) => state.currentOfferInfo);
+  const nearbyOffers = useAppSelector((state) => state.nearbyOffers) || [];
+  const reviews = useAppSelector((state) => state.currentOfferReviews) || [];
+  const {authorizationStatus, isDataLoadingError} = useAppSelector((state) => state);
   const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
 
   const onPlaceItemHover = (offer: Offer) => {
@@ -30,6 +33,32 @@ export default function PropertyScreen({reviews}: PropertyScreenProps): JSX.Elem
   const onPlaceItemLeave = () => {
     setActiveOffer(null);
   };
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchCurrentOfferInfoAction(id));
+      dispatch(fetchNearbyOffersAction(id));
+      dispatch(fetchCurrentOfferReviewsAction(id));
+    }
+  },[id, dispatch]);
+
+  if (id && (currentOffer === null || currentOffer.id !== +id)) {
+    if (isDataLoadingError) {
+      navigate(AppRoute.NotFound);
+    }
+
+    return (
+      <LoadingLayout />
+    );
+  }
+
+  if (currentOffer === null) {
+    return (
+      <NotFoundScreen />
+    );
+  }
+
+  const {host} = currentOffer;
 
   return (
     <div className="page">
@@ -141,13 +170,13 @@ export default function PropertyScreen({reviews}: PropertyScreenProps): JSX.Elem
               <section className="property__reviews reviews">
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
                 <ReviewsList reviews={reviews} />
-                <ReviewForm />
+                {authorizationStatus === AuthorizationStatus.Authorized && <ReviewForm />}
               </section>
             </div>
           </div>
           <Map
-            city={offers[0].city}
-            offers={offers.slice(1)}
+            city={currentOffer.city}
+            offers={nearbyOffers}
             additionalClass={additionalMapClass}
             activeOffer={activeOffer}
           />
@@ -156,7 +185,7 @@ export default function PropertyScreen({reviews}: PropertyScreenProps): JSX.Elem
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <PlacesList
-              offersList={offers.slice(1)}
+              offersList={nearbyOffers.slice(1)}
               placesType={placesType}
               onPlaceItemHover={onPlaceItemHover}
               onPlaceItemLeave={onPlaceItemLeave}

@@ -1,5 +1,5 @@
 import {Offer} from '../../types/offer';
-import {OFFER_TYPES_MAP, AppRoute} from '../../const';
+import {AppRoute, OFFER_TYPES_MAP} from '../../const';
 import {MouseEvent} from 'react';
 import {Link} from 'react-router-dom';
 import {getRatingStarWidth} from '../../utils';
@@ -43,7 +43,7 @@ export default function PlaceCard(props: PlaceCardProps): JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`${AppRoute.Room}${offer.id}`}>{offer.title}</Link>
+          <Link to={`${AppRoute.Offer}${offer.id}`}>{offer.title}</Link>
         </h2>
         <p className="place-card__type">{OFFER_TYPES_MAP[offer.type]}</p>
       </div>

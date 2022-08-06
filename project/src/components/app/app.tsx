@@ -6,15 +6,10 @@ import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
 import PropertyScreen from '../../pages/property-screen/property-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import PrivateRoute from '../../components/private-route/private-route';
-import {Review} from '../../types/review';
 import { useAppSelector } from '../../hooks';
 import LoadingLayout from '../loading-layout/loading-layout';
 
-type AppScreenProps = {
-  reviewsList: Review[];
-}
-
-export default function App({reviewsList}: AppScreenProps): JSX.Element {
+export default function App(): JSX.Element {
   const isDataLoading = useAppSelector((state) => state.isDataLoading);
 
   if (isDataLoading) {
@@ -46,7 +41,7 @@ export default function App({reviewsList}: AppScreenProps): JSX.Element {
         />
         <Route
           path={AppRoute.Room}
-          element={<PropertyScreen reviews={reviewsList} />}
+          element={<PropertyScreen />}
         />
         <Route
           path={AppRoute.NotFound}
