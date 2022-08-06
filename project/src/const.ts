@@ -18,6 +18,7 @@ export enum AppRoute {
   Main = '/',
   Login = '/login',
   Favorites = '/favorites',
+  Offer = '/offer/',
   Room = '/offer/:id',
   NotFound = '*',
 }
@@ -38,6 +39,7 @@ export enum SortOption {
 export enum APIRoute {
   Offers = '/hotels',
   Login = '/login',
+  Reviews = '/comments',
 }
 
 export const cities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'] as const;
