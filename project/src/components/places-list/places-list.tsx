@@ -14,13 +14,17 @@ export default function PlacesList({offersList, placesType, onPlaceItemHover, on
   return (
     <div className={`places__list ${PLACES_LIST_CLASSES[placesType]}`}>
       {offersList.map((offer) => (
-        <PlaceCard
+        <article
           key={offer.id}
-          offer={offer}
-          placeType={placesType}
-          placeItemHoverHandler={(evt: MouseEvent<HTMLElement>) => onPlaceItemHover(offer)}
-          placeItemLeaveHandler={(evt: MouseEvent<HTMLElement>) => onPlaceItemLeave()}
-        />
+          className={`${placesType}__card place-card`}
+          onMouseOver={(evt: MouseEvent<HTMLElement>) => onPlaceItemHover(offer)}
+          onMouseLeave={(evt: MouseEvent<HTMLElement>) => onPlaceItemLeave()}
+        >
+          <PlaceCard
+            placeType={placesType}
+            offer={offer}
+          />
+        </article>
       ))}
     </div>
   );

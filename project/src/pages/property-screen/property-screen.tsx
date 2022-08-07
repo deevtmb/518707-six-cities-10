@@ -1,7 +1,6 @@
 import { useEffect, useState} from 'react';
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {Offer} from '../../types/offer';
-import Logo from '../../components/logo/logo';
 import {OFFER_TYPES_MAP,AppRoute, AuthorizationStatus} from '../../const';
 import ReviewForm from '../../components/review-form/review-form';
 import ReviewsList from '../../components/reviews-list/reviews-list';
@@ -12,6 +11,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import { fetchCurrentOfferInfoAction, fetchCurrentOfferReviewsAction, fetchNearbyOffersAction } from '../../store/api-actions';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import LoadingLayout from '../../components/loading-layout/loading-layout';
+import Header from '../../components/header/header';
 
 export default function PropertyScreen(): JSX.Element {
   const additionalMapClass = 'property__map';
@@ -62,34 +62,7 @@ export default function PropertyScreen(): JSX.Element {
 
   return (
     <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <Logo />
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="/">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    <Link to={AppRoute.Favorites}>
-                      <span className="header__favorite-count">3</span>
-                    </Link>
-                  </a>
-                </li>
-                <li className="header__nav-item">
-                  <a className="header__nav-link" href="/">
-                    <span className="header__signout">Sign out</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="page__main page__main--property">
         <section className="property">
@@ -185,7 +158,7 @@ export default function PropertyScreen(): JSX.Element {
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <PlacesList
-              offersList={nearbyOffers.slice(1)}
+              offersList={nearbyOffers}
               placesType={placesType}
               onPlaceItemHover={onPlaceItemHover}
               onPlaceItemLeave={onPlaceItemLeave}

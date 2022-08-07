@@ -1,22 +1,18 @@
 import {Offer} from '../../types/offer';
 import {AppRoute, OFFER_TYPES_MAP} from '../../const';
-import {MouseEvent} from 'react';
 import {Link} from 'react-router-dom';
 import {getRatingStarWidth} from '../../utils';
 
 type PlaceCardProps = {
-  key: number;
   offer: Offer;
   placeType: string;
-  placeItemHoverHandler: (evt: MouseEvent<HTMLElement>) => void;
-  placeItemLeaveHandler: (evt: MouseEvent<HTMLElement>) => void;
 }
 
 export default function PlaceCard(props: PlaceCardProps): JSX.Element {
-  const {key, offer, placeType, placeItemHoverHandler, placeItemLeaveHandler} = props;
+  const {offer, placeType} = props;
 
   return (
-    <article key={key} className={`${placeType}__card place-card`} onMouseOver={placeItemHoverHandler} onMouseLeave={placeItemLeaveHandler}>
+    <>
       {offer.isPremium && <div className="place-card__mark"><span>Premium</span></div>}
       <div className={`${placeType}__image-wrapper place-card__image-wrapper`}>
         <a href="/">
@@ -47,6 +43,6 @@ export default function PlaceCard(props: PlaceCardProps): JSX.Element {
         </h2>
         <p className="place-card__type">{OFFER_TYPES_MAP[offer.type]}</p>
       </div>
-    </article>
+    </>
   );
 }
