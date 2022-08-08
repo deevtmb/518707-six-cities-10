@@ -12,3 +12,9 @@ export type Review = {
   rating: number;
   user: User;
 }
+
+export type ReviewToUpload = {
+  offerId: number;
+  comment: string;
+  rating: number;
+}

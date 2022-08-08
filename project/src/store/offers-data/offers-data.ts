@@ -1,52 +1,53 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
-import { AppData } from '../../types/state';
-import { fetchCurrentOfferInfoAction, fetchNearbyOffersAction, fetchOffersAction, fetchReviewsAction, postComment } from '../api-actions';
+import { OffersData } from '../../types/state';
+import { fetchNearbyOffersAction, fetchOfferInfoAction, fetchOffersAction} from '../api-actions';
 
 const DEFAULT_CITY = 'Paris';
 
-const initialState: AppData = {
+const initialState: OffersData = {
   city: DEFAULT_CITY,
   offers: [],
   currentOfferInfo: null,
   nearbyOffers: [],
-  reviews: [],
   isDataLoading: false,
   isDataLoadingError: false,
 };
 
-export const appData = createSlice({
-  name: NameSpace.Data,
+export const offersData = createSlice({
+  name: NameSpace.Offers,
   initialState,
   reducers: {
     changeSelectedCity: (state, action) => {
       state.city = action.payload;
     },
+    setDatsLoadingError: (state, action) => {
+      state.isDataLoadingError = action.payload;
+    }
   },
   extraReducers(builder) {
     builder
       .addCase(fetchOffersAction.pending, (state) => {
         state.isDataLoading = true;
       })
+      .addCase(fetchOffersAction.rejected, (state) => {
+        state.isDataLoading = false;
+      })
       .addCase(fetchOffersAction.fulfilled, (state, action) => {
         state.offers = action.payload;
         state.isDataLoading = false;
       })
-      // .addCase(fetchCurrentOfferInfoAction.pending, (state) => {
-      //   state.isDataLoading = true;
-      // })
-      .addCase(fetchCurrentOfferInfoAction.fulfilled, (state, action) => {
+      .addCase(fetchOfferInfoAction.pending, (state, action) => {
+        state.isDataLoadingError = false;
+      })
+      .addCase(fetchOfferInfoAction.rejected, (state, action) => {
+        state.isDataLoadingError = true;
+      })
+      .addCase(fetchOfferInfoAction.fulfilled, (state, action) => {
         state.currentOfferInfo = action.payload;
-        // state.isDataLoading = false;
       })
       .addCase(fetchNearbyOffersAction.fulfilled, (state, action) => {
         state.nearbyOffers = action.payload;
-      })
-      .addCase(fetchReviewsAction.fulfilled, (state, action) => {
-        state.reviews = action.payload;
-      })
-      .addCase(postComment.fulfilled, (state, action) => {
-        state.reviews = action.payload;
       });
   }
 });

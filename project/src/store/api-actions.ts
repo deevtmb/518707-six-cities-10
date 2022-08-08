@@ -6,9 +6,7 @@ import { AppDispatch, State } from '../types/state';
 import { AuthorizationData } from '../types/auth-data';
 import { saveToken } from '../services/token';
 import { UserData } from '../types/user-data';
-import { Review } from '../types/review';
-import { CommentToUpload } from '../types/comment';
-
+import { Review, ReviewToUpload } from '../types/review';
 
 export const fetchOffersAction = createAsyncThunk<Offer[], undefined, {
   dispatch: AppDispatch,
@@ -22,7 +20,7 @@ export const fetchOffersAction = createAsyncThunk<Offer[], undefined, {
   }
 );
 
-export const fetchCurrentOfferInfoAction = createAsyncThunk<Offer, string, {
+export const fetchOfferInfoAction = createAsyncThunk<Offer, string, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
@@ -58,12 +56,12 @@ export const fetchReviewsAction = createAsyncThunk<Review[], string, {
   }
 );
 
-export const postComment = createAsyncThunk<Review[], CommentToUpload, {
+export const postReview = createAsyncThunk<Review[], ReviewToUpload, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
 }>(
-  'data/postComment',
+  'data/postReview',
   async ({offerId, comment, rating}, {dispatch, extra: api}) => {
     const {data} = await api.post<Review[]>(`${APIRoute.Reviews}/${offerId}`, {comment, rating});
     return data;

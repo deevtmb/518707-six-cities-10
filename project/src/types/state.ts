@@ -7,15 +7,18 @@ export type UserProcess = {
   authorizationStatus: AuthorizationStatus,
 }
 
-export type AppData = {
+export type OffersData = {
   city: string;
   offers: Offer[];
   currentOfferInfo: Offer | null;
   nearbyOffers: Offer[];
-  reviews: Review[];
   isDataLoading: boolean;
   isDataLoadingError: boolean;
 };
+
+export type ReviewsData = {
+  reviews: Review[]
+}
 
 export type State = ReturnType<typeof store.getState>;
 

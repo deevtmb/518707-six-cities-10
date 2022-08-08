@@ -8,7 +8,7 @@ import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import PrivateRoute from '../../components/private-route/private-route';
 import { useAppSelector } from '../../hooks';
 import LoadingLayout from '../loading-layout/loading-layout';
-import { getLoadingStatus } from '../../store/app-data/selectors';
+import { getLoadingStatus } from '../../store/offers-data/selectors';
 
 export default function App(): JSX.Element {
   const isDataLoading = useAppSelector(getLoadingStatus);

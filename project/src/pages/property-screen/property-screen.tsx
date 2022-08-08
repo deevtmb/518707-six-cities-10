@@ -1,19 +1,20 @@
-import { useEffect, useState} from 'react';
+import { useLayoutEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Offer} from '../../types/offer';
-import {OFFER_TYPES_MAP,AppRoute, AuthorizationStatus} from '../../const';
+import {OFFER_TYPES_MAP, AuthorizationStatus, AppRoute} from '../../const';
 import ReviewForm from '../../components/review-form/review-form';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import PlacesList from '../../components/places-list/places-list';
 import Map from '../../components/map/map';
 import {getRatingStarWidth} from '../../utils';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import { fetchCurrentOfferInfoAction, fetchReviewsAction, fetchNearbyOffersAction } from '../../store/api-actions';
+import { fetchOfferInfoAction, fetchReviewsAction, fetchNearbyOffersAction } from '../../store/api-actions';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import LoadingLayout from '../../components/loading-layout/loading-layout';
 import Header from '../../components/header/header';
-import { getCurrentOfferInfo, getLoadingStatus, getNearbyOffers, getReviews } from '../../store/app-data/selectors';
+import { getCurrentOfferInfo, getDataLoadingError, getNearbyOffers } from '../../store/offers-data/selectors';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { getReviews } from '../../store/reviews-data/selectors';
 
 export default function PropertyScreen(): JSX.Element {
   const additionalMapClass = 'property__map';
@@ -25,8 +26,8 @@ export default function PropertyScreen(): JSX.Element {
   const currentOffer = useAppSelector(getCurrentOfferInfo);
   const nearbyOffers = useAppSelector(getNearbyOffers) || [];
   const reviews = useAppSelector(getReviews) || [];
-  const isDataLoadingError = useAppSelector(getLoadingStatus);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const dataLoadingError = useAppSelector(getDataLoadingError);
   const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
 
   const onPlaceItemHover = (offer: Offer) => {
@@ -37,25 +38,25 @@ export default function PropertyScreen(): JSX.Element {
     setActiveOffer(null);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (id) {
-      dispatch(fetchCurrentOfferInfoAction(id));
+      dispatch(fetchOfferInfoAction(id));
       dispatch(fetchNearbyOffersAction(id));
       dispatch(fetchReviewsAction(id));
     }
-  },[id, dispatch]);
+  },[id, dispatch, navigate]);
+
+  if (dataLoadingError) {
+    navigate(AppRoute.NotFound);
+  }
 
   if (id && (currentOffer === null || currentOffer.id !== +id)) {
-    if (isDataLoadingError) {
-      navigate(AppRoute.NotFound);
-    }
-
     return (
       <LoadingLayout />
     );
   }
 
-  if (currentOffer === null) {
+  if (currentOffer === null || !id) {
     return (
       <NotFoundScreen />
     );
