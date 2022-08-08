@@ -7,6 +7,7 @@ import { AuthorizationData } from '../types/auth-data';
 import { saveToken } from '../services/token';
 import { UserData } from '../types/user-data';
 import { Review, ReviewToUpload } from '../types/review';
+import { FavoriteStatus } from '../types/favorite';
 
 export const fetchOffersAction = createAsyncThunk<Offer[], undefined, {
   dispatch: AppDispatch,
@@ -68,23 +69,51 @@ export const postReview = createAsyncThunk<Review[], ReviewToUpload, {
   }
 );
 
-export const checkAuthorizationAction = createAsyncThunk<void, undefined, {
+export const fetchFavoriteOffersAction = createAsyncThunk<Offer[], undefined, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance,
+}>(
+  'data/fetchFavoriteOffers',
+  async (_arg, {dispatch, extra: api}) => {
+    const {data} = await api.get<Offer[]>(APIRoute.Favorite);
+    return data;
+  }
+);
+
+export const changeFavoriteStatusAction = createAsyncThunk<Offer, FavoriteStatus, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance,
+}>(
+  'data/changeFavoriteStatus',
+  async ({offerId, status}, {dispatch, extra: api}) => {
+    const {data} = await api.post<Offer>(`${APIRoute.Favorite}/${offerId}/${status}`);
+    return data;
+  }
+);
+
+export const checkAuthorizationAction = createAsyncThunk<UserData, undefined, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
 }>(
   'user/checkAuthorization',
-  async (_arg, {dispatch, extra: api}) => await api.get(APIRoute.Login),
+  async (_arg, {dispatch, extra: api}) => {
+    const {data} = await api.get(APIRoute.Login);
+    return data;
+  }
 );
 
-export const loginAction = createAsyncThunk<void, AuthorizationData, {
+export const loginAction = createAsyncThunk<UserData, AuthorizationData, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
 }>(
   'user/login',
   async ({email, password}, {dispatch, extra: api}) => {
-    const {data: {token}} = await api.post<UserData>(APIRoute.Login, {email, password});
-    saveToken(token);
+    const {data} = await api.post<UserData>(APIRoute.Login, {email, password});
+    saveToken(data.token);
+    return data;
   }
 );

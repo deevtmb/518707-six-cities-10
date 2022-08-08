@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState} from 'react';
+import { useLayoutEffect, useState, MouseEvent} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Offer} from '../../types/offer';
 import {OFFER_TYPES_MAP, AuthorizationStatus, AppRoute} from '../../const';
@@ -6,13 +6,13 @@ import ReviewForm from '../../components/review-form/review-form';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import PlacesList from '../../components/places-list/places-list';
 import Map from '../../components/map/map';
-import {getRatingStarWidth} from '../../utils';
-import {useAppDispatch, useAppSelector} from '../../hooks';
-import { fetchOfferInfoAction, fetchReviewsAction, fetchNearbyOffersAction } from '../../store/api-actions';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import LoadingLayout from '../../components/loading-layout/loading-layout';
 import Header from '../../components/header/header';
-import { getCurrentOfferInfo, getDataLoadingError, getNearbyOffers } from '../../store/offers-data/selectors';
+import {getRatingStarWidth} from '../../utils';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import { fetchOfferInfoAction, fetchReviewsAction, fetchNearbyOffersAction, changeFavoriteStatusAction } from '../../store/api-actions';
+import { getCurrentOfferInfo, getDataLoadingError, getNearbyOffers, getOffers } from '../../store/offers-data/selectors';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
 import { getReviews } from '../../store/reviews-data/selectors';
 
@@ -29,6 +29,8 @@ export default function PropertyScreen(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dataLoadingError = useAppSelector(getDataLoadingError);
   const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
+
+  useAppSelector(getOffers);
 
   const onPlaceItemHover = (offer: Offer) => {
     setActiveOffer(offer);
@@ -64,6 +66,19 @@ export default function PropertyScreen(): JSX.Element {
 
   const {host} = currentOffer;
 
+  const handleFavoriteButtonClick = (evt: MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+
+    if (authorizationStatus !== AuthorizationStatus.Authorized) {
+      navigate(AppRoute.Login);
+    }
+
+    dispatch(changeFavoriteStatusAction({
+      offerId: currentOffer.id,
+      status: currentOffer.isFavorite ? 0 : 1,
+    }));
+  };
+
   return (
     <div className="page">
       <Header />
@@ -86,7 +101,11 @@ export default function PropertyScreen(): JSX.Element {
                 <h1 className="property__name">
                   {currentOffer.title}
                 </h1>
-                <button className={`property__bookmark-button ${currentOffer.isFavorite ? 'property__bookmark-button--active' : ''} button`} type="button">
+                <button
+                  className={`property__bookmark-button ${currentOffer.isFavorite ? 'property__bookmark-button--active' : ''} button`}
+                  type="button"
+                  onClick={handleFavoriteButtonClick}
+                >
                   <svg className="property__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>

@@ -9,6 +9,8 @@ export const getCurrentOfferInfo = (state: State): Offer | null => state[NameSpa
 
 export const getNearbyOffers = (state: State): Offer[] => state[NameSpace.Offers].nearbyOffers;
 
+export const getFavoriteOffers = (state: State): Offer[] => state[NameSpace.Offers].favoriteOffers;
+
 export const getCurrentCity = (state: State): string => state[NameSpace.Offers].city;
 
 export const getLoadingStatus = (state: State): boolean => state[NameSpace.Offers].isDataLoading;

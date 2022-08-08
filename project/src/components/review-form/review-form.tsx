@@ -28,7 +28,7 @@ export default function ReviewForm(): JSX.Element {
           value="5"
           id="5-stars"
           type="radio"
-          checked={review.rating === 5}
+          defaultChecked={review.rating === 5}
           onClick={() => setReview({...review, rating: 5})}
         />
         <label htmlFor="5-stars" className="reviews__rating-label form__rating-label" title="perfect">
@@ -43,7 +43,7 @@ export default function ReviewForm(): JSX.Element {
           value="4"
           id="4-stars"
           type="radio"
-          checked={review.rating === 4}
+          defaultChecked={review.rating === 4}
           onClick={() => setReview({...review, rating: 4})}
         />
         <label htmlFor="4-stars" className="reviews__rating-label form__rating-label" title="good">
@@ -58,7 +58,7 @@ export default function ReviewForm(): JSX.Element {
           value="3"
           id="3-stars"
           type="radio"
-          checked={review.rating === 3}
+          defaultChecked={review.rating === 3}
           onClick={() => setReview({...review, rating: 3})}
         />
         <label htmlFor="3-stars" className="reviews__rating-label form__rating-label" title="not bad">
@@ -73,7 +73,7 @@ export default function ReviewForm(): JSX.Element {
           value="2"
           id="2-stars"
           type="radio"
-          checked={review.rating === 2}
+          defaultChecked={review.rating === 2}
           onClick={() => setReview({...review, rating: 2})}
         />
         <label htmlFor="2-stars" className="reviews__rating-label form__rating-label" title="badly">
@@ -88,7 +88,7 @@ export default function ReviewForm(): JSX.Element {
           value="1"
           id="1-star"
           type="radio"
-          checked={review.rating === 1}
+          defaultChecked={review.rating === 1}
           onClick={() => setReview({...review, rating: 1})}
         />
         <label htmlFor="1-star" className="reviews__rating-label form__rating-label" title="terribly">

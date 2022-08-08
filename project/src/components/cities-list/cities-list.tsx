@@ -9,6 +9,7 @@ type CitiesListProps = {
 
 export default function CitiesList({currentCity}: CitiesListProps): JSX.Element {
   const dispatch = useAppDispatch();
+
   return (
     <ul className="locations__list tabs__list">
       {cities.map((city) => (

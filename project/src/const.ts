@@ -40,6 +40,7 @@ export enum APIRoute {
   Offers = '/hotels',
   Login = '/login',
   Reviews = '/comments',
+  Favorite = '/favorite',
 }
 
 export enum NameSpace {

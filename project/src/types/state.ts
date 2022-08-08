@@ -2,9 +2,11 @@ import { AuthorizationStatus } from '../const';
 import {store} from '../store/index';
 import { Offer } from './offer';
 import { Review } from './review';
+import { UserData } from './user-data';
 
 export type UserProcess = {
   authorizationStatus: AuthorizationStatus,
+  user: UserData | null,
 }
 
 export type OffersData = {
@@ -12,6 +14,7 @@ export type OffersData = {
   offers: Offer[];
   currentOfferInfo: Offer | null;
   nearbyOffers: Offer[];
+  favoriteOffers: Offer[];
   isDataLoading: boolean;
   isDataLoadingError: boolean;
 };

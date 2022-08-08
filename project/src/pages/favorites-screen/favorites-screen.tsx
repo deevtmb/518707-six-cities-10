@@ -1,12 +1,10 @@
-import {Offer} from '../../types/offer';
 import {useAppSelector} from '../../hooks';
 import FavoritesList from '../../components/favorites-list/favorites-list';
 import Header from '../../components/header/header';
-import { getOffers } from '../../store/offers-data/selectors';
+import { getFavoriteOffers } from '../../store/offers-data/selectors';
 
 export default function FavoritesScreen(): JSX.Element {
-  const offers = useAppSelector(getOffers);
-  const favoriteOffers = offers.filter((offer: Offer) => offer.isFavorite);
+  const favoriteOffers = useAppSelector(getFavoriteOffers);
 
   return (
     <div className="page">
