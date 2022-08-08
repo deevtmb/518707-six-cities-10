@@ -70,7 +70,7 @@ export const offersData = createSlice({
         if (favoriteOfferId === -1) {
           state.favoriteOffers.push(action.payload);
         } else {
-          state.favoriteOffers = [...state.favoriteOffers.slice(0, favoriteOfferId), ...state.favoriteOffers.slice(favoriteOfferId)];
+          state.favoriteOffers = [...state.favoriteOffers.slice(0, favoriteOfferId), ...state.favoriteOffers.slice(favoriteOfferId + 1)];
         }
 
         state.offers[offerId] = action.payload;
