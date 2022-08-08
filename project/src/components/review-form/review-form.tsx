@@ -2,11 +2,12 @@ import {FormEvent, useState} from 'react';
 import {ChangeEvent} from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { postComment } from '../../store/api-actions';
+import { getCurrentOfferInfo } from '../../store/app-data/selectors';
 
 export default function ReviewForm(): JSX.Element {
   const dispatch = useAppDispatch();
   const [review, setReview] = useState({comment: '', rating: 0});
-  const currentOffer = useAppSelector((state) => state.currentOfferInfo);
+  const currentOffer = useAppSelector(getCurrentOfferInfo);
 
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();

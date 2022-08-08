@@ -7,13 +7,14 @@ import SortOptions from '../../components/sort-options/sort-options';
 import Map from '../../components/map/map';
 import {useAppSelector} from '../../hooks';
 import Header from '../../components/header/header';
+import { getCurrentCity, getOffers } from '../../store/app-data/selectors';
 
 export default function MainScreen(): JSX.Element {
   const additionalMapClass = 'cities__map';
   const placesType = 'cities';
 
-  const currentCity = useAppSelector((state) => state.city);
-  const currentOffers = useAppSelector((state) => state.offers).filter((offer) => offer.city.name === currentCity);
+  const currentCity = useAppSelector(getCurrentCity);
+  const currentOffers = useAppSelector(getOffers).filter((offer) => offer.city.name === currentCity);
   const currentCityInfo = currentOffers[0].city;
 
   const [isSortListOpened, setSortListOpened] = useState(false);

@@ -8,10 +8,12 @@ import PlacesList from '../../components/places-list/places-list';
 import Map from '../../components/map/map';
 import {getRatingStarWidth} from '../../utils';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import { fetchCurrentOfferInfoAction, fetchCurrentOfferReviewsAction, fetchNearbyOffersAction } from '../../store/api-actions';
+import { fetchCurrentOfferInfoAction, fetchReviewsAction, fetchNearbyOffersAction } from '../../store/api-actions';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import LoadingLayout from '../../components/loading-layout/loading-layout';
 import Header from '../../components/header/header';
+import { getCurrentOfferInfo, getLoadingStatus, getNearbyOffers, getReviews } from '../../store/app-data/selectors';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
 
 export default function PropertyScreen(): JSX.Element {
   const additionalMapClass = 'property__map';
@@ -20,10 +22,11 @@ export default function PropertyScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {id} = useParams();
-  const currentOffer = useAppSelector((state) => state.currentOfferInfo);
-  const nearbyOffers = useAppSelector((state) => state.nearbyOffers) || [];
-  const reviews = useAppSelector((state) => state.currentOfferReviews) || [];
-  const {authorizationStatus, isDataLoadingError} = useAppSelector((state) => state);
+  const currentOffer = useAppSelector(getCurrentOfferInfo);
+  const nearbyOffers = useAppSelector(getNearbyOffers) || [];
+  const reviews = useAppSelector(getReviews) || [];
+  const isDataLoadingError = useAppSelector(getLoadingStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
 
   const onPlaceItemHover = (offer: Offer) => {
@@ -38,7 +41,7 @@ export default function PropertyScreen(): JSX.Element {
     if (id) {
       dispatch(fetchCurrentOfferInfoAction(id));
       dispatch(fetchNearbyOffersAction(id));
-      dispatch(fetchCurrentOfferReviewsAction(id));
+      dispatch(fetchReviewsAction(id));
     }
   },[id, dispatch]);
 

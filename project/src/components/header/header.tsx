@@ -5,9 +5,10 @@ import HeaderLogout from '../header-logout/header-logout';
 import HeaderLogin from '../header-login/header-login';
 import Logo from '../logo/logo';
 import { useLocation } from 'react-router-dom';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
 
 export default function Header(): JSX.Element {
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const {pathname} = useLocation();
 
   return (

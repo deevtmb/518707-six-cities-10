@@ -42,4 +42,9 @@ export enum APIRoute {
   Reviews = '/comments',
 }
 
+export enum NameSpace {
+  Data = 'DATA',
+  User = 'USER',
+}
+
 export const cities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'] as const;
