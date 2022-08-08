@@ -2,15 +2,28 @@ import {Offer} from '../../types/offer';
 import {OFFER_TYPES_MAP, AppRoute} from '../../const';
 import {Link} from 'react-router-dom';
 import {getRatingStarWidth} from '../../utils';
+import {MouseEvent} from 'react';
+import { useAppDispatch } from '../../hooks';
+import { changeFavoriteStatusAction } from '../../store/api-actions';
 
 type FavoriteCardProps = {
-  key: number;
   offer: Offer;
 }
 
-export default function FavoriteCard({key, offer}: FavoriteCardProps): JSX.Element {
+export default function FavoriteCard({offer}: FavoriteCardProps): JSX.Element {
+  const dispatch = useAppDispatch();
+
+  const handleFavoriteButtonClick = (evt: MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+
+    dispatch(changeFavoriteStatusAction({
+      offerId: offer.id,
+      status: offer.isFavorite ? 0 : 1,
+    }));
+  };
+
   return (
-    <article key={key} className="favorites__card place-card">
+    <>
       <div className="favorites__image-wrapper place-card__image-wrapper">
         <Link to={`${AppRoute.Room}${offer.id}`}>
           <img className="place-card__image" src={offer.previewImage} width="150" height="110" alt={offer.title} />
@@ -22,7 +35,11 @@ export default function FavoriteCard({key, offer}: FavoriteCardProps): JSX.Eleme
             <b className="place-card__price-value">&euro;{offer.price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
+          <button
+            className="place-card__bookmark-button place-card__bookmark-button--active button"
+            type="button"
+            onClick={handleFavoriteButtonClick}
+          >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
@@ -40,6 +57,6 @@ export default function FavoriteCard({key, offer}: FavoriteCardProps): JSX.Eleme
         </h2>
         <p className="place-card__type">{OFFER_TYPES_MAP[offer.type]}</p>
       </div>
-    </article>
+    </>
   );
 }

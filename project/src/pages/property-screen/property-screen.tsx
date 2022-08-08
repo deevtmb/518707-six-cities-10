@@ -1,17 +1,20 @@
-import { useEffect, useState} from 'react';
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import { useLayoutEffect, useState, MouseEvent} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import {Offer} from '../../types/offer';
-import Logo from '../../components/logo/logo';
-import {OFFER_TYPES_MAP,AppRoute, AuthorizationStatus} from '../../const';
+import {OFFER_TYPES_MAP, AuthorizationStatus, AppRoute} from '../../const';
 import ReviewForm from '../../components/review-form/review-form';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import PlacesList from '../../components/places-list/places-list';
 import Map from '../../components/map/map';
-import {getRatingStarWidth} from '../../utils';
-import {useAppDispatch, useAppSelector} from '../../hooks';
-import { fetchCurrentOfferInfoAction, fetchCurrentOfferReviewsAction, fetchNearbyOffersAction } from '../../store/api-actions';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import LoadingLayout from '../../components/loading-layout/loading-layout';
+import Header from '../../components/header/header';
+import {getRatingStarWidth} from '../../utils';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import { fetchOfferInfoAction, fetchReviewsAction, fetchNearbyOffersAction, changeFavoriteStatusAction } from '../../store/api-actions';
+import { getCurrentOfferInfo, getDataLoadingError, getNearbyOffers, getOffers } from '../../store/offers-data/selectors';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { getReviews } from '../../store/reviews-data/selectors';
 
 export default function PropertyScreen(): JSX.Element {
   const additionalMapClass = 'property__map';
@@ -20,11 +23,14 @@ export default function PropertyScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {id} = useParams();
-  const currentOffer = useAppSelector((state) => state.currentOfferInfo);
-  const nearbyOffers = useAppSelector((state) => state.nearbyOffers) || [];
-  const reviews = useAppSelector((state) => state.currentOfferReviews) || [];
-  const {authorizationStatus, isDataLoadingError} = useAppSelector((state) => state);
+  const currentOffer = useAppSelector(getCurrentOfferInfo);
+  const nearbyOffers = useAppSelector(getNearbyOffers) || [];
+  const reviews = useAppSelector(getReviews) || [];
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const dataLoadingError = useAppSelector(getDataLoadingError);
   const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
+
+  useAppSelector(getOffers);
 
   const onPlaceItemHover = (offer: Offer) => {
     setActiveOffer(offer);
@@ -34,25 +40,25 @@ export default function PropertyScreen(): JSX.Element {
     setActiveOffer(null);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (id) {
-      dispatch(fetchCurrentOfferInfoAction(id));
+      dispatch(fetchOfferInfoAction(id));
       dispatch(fetchNearbyOffersAction(id));
-      dispatch(fetchCurrentOfferReviewsAction(id));
+      dispatch(fetchReviewsAction(id));
     }
-  },[id, dispatch]);
+  },[id, dispatch, navigate]);
+
+  if (dataLoadingError) {
+    navigate(AppRoute.NotFound);
+  }
 
   if (id && (currentOffer === null || currentOffer.id !== +id)) {
-    if (isDataLoadingError) {
-      navigate(AppRoute.NotFound);
-    }
-
     return (
       <LoadingLayout />
     );
   }
 
-  if (currentOffer === null) {
+  if (currentOffer === null || !id) {
     return (
       <NotFoundScreen />
     );
@@ -60,36 +66,22 @@ export default function PropertyScreen(): JSX.Element {
 
   const {host} = currentOffer;
 
+  const handleFavoriteButtonClick = (evt: MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+
+    if (authorizationStatus !== AuthorizationStatus.Authorized) {
+      navigate(AppRoute.Login);
+    }
+
+    dispatch(changeFavoriteStatusAction({
+      offerId: currentOffer.id,
+      status: currentOffer.isFavorite ? 0 : 1,
+    }));
+  };
+
   return (
     <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <Logo />
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="/">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    <Link to={AppRoute.Favorites}>
-                      <span className="header__favorite-count">3</span>
-                    </Link>
-                  </a>
-                </li>
-                <li className="header__nav-item">
-                  <a className="header__nav-link" href="/">
-                    <span className="header__signout">Sign out</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="page__main page__main--property">
         <section className="property">
@@ -109,7 +101,11 @@ export default function PropertyScreen(): JSX.Element {
                 <h1 className="property__name">
                   {currentOffer.title}
                 </h1>
-                <button className={`property__bookmark-button ${currentOffer.isFavorite ? 'property__bookmark-button--active' : ''} button`} type="button">
+                <button
+                  className={`property__bookmark-button ${currentOffer.isFavorite ? 'property__bookmark-button--active' : ''} button`}
+                  type="button"
+                  onClick={handleFavoriteButtonClick}
+                >
                   <svg className="property__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
@@ -185,7 +181,7 @@ export default function PropertyScreen(): JSX.Element {
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <PlacesList
-              offersList={nearbyOffers.slice(1)}
+              offersList={nearbyOffers}
               placesType={placesType}
               onPlaceItemHover={onPlaceItemHover}
               onPlaceItemLeave={onPlaceItemLeave}

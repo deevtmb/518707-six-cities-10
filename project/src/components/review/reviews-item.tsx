@@ -3,15 +3,14 @@ import {getRatingStarWidth} from '../../utils';
 import dayjs from 'dayjs';
 
 type ReviewsItemProps = {
-  key: number;
   review: Review;
 }
 
-export default function ReviewsItem({key, review}: ReviewsItemProps): JSX.Element {
+export default function ReviewsItem({review}: ReviewsItemProps): JSX.Element {
   const DATE_FORMAT = 'MMMM YYYY';
 
   return (
-    <li key={key} className="reviews__item">
+    <>
       <div className="reviews__user user">
         <div className="reviews__avatar-wrapper user__avatar-wrapper">
           <img className="reviews__avatar user__avatar" src={review.user.avatarUrl} width="54" height="54" alt="Reviews avatar" />
@@ -32,6 +31,6 @@ export default function ReviewsItem({key, review}: ReviewsItemProps): JSX.Elemen
         </p>
         <time className="reviews__time" dateTime={review.date}>{dayjs(review.date).format(DATE_FORMAT)}</time>
       </div>
-    </li>
+    </>
   );
 }
