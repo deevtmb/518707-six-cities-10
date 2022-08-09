@@ -4,7 +4,7 @@ import { APIRoute } from '../const';
 import { Offer } from '../types/offer';
 import { AppDispatch, State } from '../types/state';
 import { AuthorizationData } from '../types/auth-data';
-import { saveToken } from '../services/token';
+import { dropToken, saveToken } from '../services/token';
 import { UserData } from '../types/user-data';
 import { Review, ReviewToUpload } from '../types/review';
 import { FavoriteStatus } from '../types/favorite';
@@ -115,5 +115,17 @@ export const loginAction = createAsyncThunk<UserData, AuthorizationData, {
     const {data} = await api.post<UserData>(APIRoute.Login, {email, password});
     saveToken(data.token);
     return data;
+  }
+);
+
+export const logoutAction = createAsyncThunk<void, undefined, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'user/logout',
+  async (_args, {dispatch, extra: api}) => {
+    await api.delete(APIRoute.Logout);
+    dropToken();
   }
 );

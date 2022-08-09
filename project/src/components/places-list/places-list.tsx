@@ -6,8 +6,8 @@ import PlaceCard from '../place-card/place-card';
 type PlacesListProps = {
   offersList: Offer[];
   placesType: string;
-  onPlaceItemHover: (offer: Offer) => void;
-  onPlaceItemLeave: () => void;
+  onPlaceItemHover?: (offer: Offer) => void;
+  onPlaceItemLeave?: () => void;
 }
 
 export default function PlacesList({offersList, placesType, onPlaceItemHover, onPlaceItemLeave}: PlacesListProps): JSX.Element {
@@ -17,8 +17,8 @@ export default function PlacesList({offersList, placesType, onPlaceItemHover, on
         <article
           key={offer.id}
           className={`${placesType}__card place-card`}
-          onMouseOver={(evt: MouseEvent<HTMLElement>) => onPlaceItemHover(offer)}
-          onMouseLeave={(evt: MouseEvent<HTMLElement>) => onPlaceItemLeave()}
+          onMouseOver={(evt: MouseEvent<HTMLElement>) => onPlaceItemHover && onPlaceItemHover(offer)}
+          onMouseLeave={(evt: MouseEvent<HTMLElement>) => onPlaceItemLeave && onPlaceItemLeave()}
         >
           <PlaceCard
             placeType={placesType}

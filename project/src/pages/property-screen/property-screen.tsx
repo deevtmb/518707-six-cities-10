@@ -1,6 +1,5 @@
-import { useLayoutEffect, useState, MouseEvent} from 'react';
+import { useLayoutEffect, MouseEvent} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {Offer} from '../../types/offer';
 import {OFFER_TYPES_MAP, AuthorizationStatus, AppRoute} from '../../const';
 import ReviewForm from '../../components/review-form/review-form';
 import ReviewsList from '../../components/reviews-list/reviews-list';
@@ -12,7 +11,7 @@ import Header from '../../components/header/header';
 import {getRatingStarWidth} from '../../utils';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import { fetchOfferInfoAction, fetchReviewsAction, fetchNearbyOffersAction, changeFavoriteStatusAction } from '../../store/api-actions';
-import { getCurrentOfferInfo, getDataLoadingError, getNearbyOffers, getOffers } from '../../store/offers-data/selectors';
+import { getCurrentOfferInfo, getDataLoadingError, getNearbyOffers } from '../../store/offers-data/selectors';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
 import { getReviews } from '../../store/reviews-data/selectors';
 
@@ -28,17 +27,6 @@ export default function PropertyScreen(): JSX.Element {
   const reviews = useAppSelector(getReviews) || [];
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dataLoadingError = useAppSelector(getDataLoadingError);
-  const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
-
-  useAppSelector(getOffers);
-
-  const onPlaceItemHover = (offer: Offer) => {
-    setActiveOffer(offer);
-  };
-
-  const onPlaceItemLeave = () => {
-    setActiveOffer(null);
-  };
 
   useLayoutEffect(() => {
     if (id) {
@@ -172,9 +160,9 @@ export default function PropertyScreen(): JSX.Element {
           </div>
           <Map
             city={currentOffer.city}
-            offers={nearbyOffers}
+            offers={[...nearbyOffers, currentOffer]}
             additionalClass={additionalMapClass}
-            activeOffer={activeOffer}
+            activeOffer={currentOffer}
           />
         </section>
         <div className="container">
@@ -183,8 +171,6 @@ export default function PropertyScreen(): JSX.Element {
             <PlacesList
               offersList={nearbyOffers}
               placesType={placesType}
-              onPlaceItemHover={onPlaceItemHover}
-              onPlaceItemLeave={onPlaceItemLeave}
             />
           </section>
         </div>
