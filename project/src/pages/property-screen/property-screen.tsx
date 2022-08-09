@@ -1,7 +1,6 @@
 import { useLayoutEffect, MouseEvent} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {OFFER_TYPES_MAP, AuthorizationStatus, AppRoute} from '../../const';
-import ReviewForm from '../../components/review-form/review-form';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import PlacesList from '../../components/places-list/places-list';
 import Map from '../../components/map/map';
@@ -10,10 +9,9 @@ import LoadingLayout from '../../components/loading-layout/loading-layout';
 import Header from '../../components/header/header';
 import {getRatingStarWidth} from '../../utils';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import { fetchOfferInfoAction, fetchReviewsAction, fetchNearbyOffersAction, changeFavoriteStatusAction } from '../../store/api-actions';
+import { fetchOfferInfoAction, fetchNearbyOffersAction, changeFavoriteStatusAction } from '../../store/api-actions';
 import { getCurrentOfferInfo, getDataLoadingError, getNearbyOffers } from '../../store/offers-data/selectors';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
-import { getReviews } from '../../store/reviews-data/selectors';
 
 export default function PropertyScreen(): JSX.Element {
   const additionalMapClass = 'property__map';
@@ -24,7 +22,6 @@ export default function PropertyScreen(): JSX.Element {
   const {id} = useParams();
   const currentOffer = useAppSelector(getCurrentOfferInfo);
   const nearbyOffers = useAppSelector(getNearbyOffers) || [];
-  const reviews = useAppSelector(getReviews) || [];
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dataLoadingError = useAppSelector(getDataLoadingError);
 
@@ -32,9 +29,8 @@ export default function PropertyScreen(): JSX.Element {
     if (id) {
       dispatch(fetchOfferInfoAction(id));
       dispatch(fetchNearbyOffersAction(id));
-      dispatch(fetchReviewsAction(id));
     }
-  },[id, dispatch, navigate]);
+  },[id, dispatch]);
 
   if (dataLoadingError) {
     navigate(AppRoute.NotFound);
@@ -151,11 +147,7 @@ export default function PropertyScreen(): JSX.Element {
                   ))}
                 </div>
               </div>
-              <section className="property__reviews reviews">
-                <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
-                <ReviewsList reviews={reviews} />
-                {authorizationStatus === AuthorizationStatus.Authorized && <ReviewForm />}
-              </section>
+              <ReviewsList />
             </div>
           </div>
           <Map
