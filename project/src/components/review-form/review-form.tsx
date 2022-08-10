@@ -1,7 +1,7 @@
 import {FormEvent, useRef, useState} from 'react';
 import {ChangeEvent} from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { postReview } from '../../store/api-actions';
+import { postReviewAction } from '../../store/api-actions';
 import { getCurrentOfferInfo } from '../../store/offers-data/selectors';
 
 export default function ReviewForm(): JSX.Element {
@@ -21,7 +21,7 @@ export default function ReviewForm(): JSX.Element {
 
       if (currentOffer) {
         const offerId = currentOffer.id;
-        const {meta: {requestStatus}} = await dispatch(postReview({offerId, ...review}));
+        const {meta: {requestStatus}} = await dispatch(postReviewAction({offerId, ...review}));
 
         if (requestStatus === 'fulfilled') {
           setReview({comment: '', rating: 0});
