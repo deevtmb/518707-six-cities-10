@@ -121,6 +121,7 @@ export default function ReviewForm(): JSX.Element {
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={review.comment}
         onChange={(evt: ChangeEvent<HTMLTextAreaElement>) => setReview({...review, comment: evt.target.value})}
+        data-testid="review-field"
       >
       </textarea>
       <div className="reviews__button-wrapper">

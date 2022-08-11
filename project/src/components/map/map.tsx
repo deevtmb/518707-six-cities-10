@@ -1,6 +1,6 @@
 import {useRef, useEffect} from 'react';
 import {Icon, Marker} from 'leaflet';
-import useMap from '../../hooks/useMap';
+import useMap from '../../hooks/use-map';
 import {City, Offer} from '../../types/offer';
 import 'leaflet/dist/leaflet.css';
 
@@ -51,5 +51,5 @@ export default function Map({city, offers, additionalClass, activeOffer}: MapPro
     }
   }, [city, offers, map]);
 
-  return <section className={`map ${additionalClass}`} ref={mapRef}></section>;
+  return <section className={`map ${additionalClass}`} ref={mapRef} data-testid="map"></section>;
 }
