@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
 import { ReviewsData } from '../../types/state';
-import { fetchReviewsAction, postReview } from '../api-actions';
+import { fetchReviewsAction, postReviewAction } from '../api-actions';
 
 const initialState: ReviewsData = {
   reviews: []
@@ -16,7 +16,7 @@ export const reviewsData = createSlice({
       .addCase(fetchReviewsAction.fulfilled, (state, action) => {
         state.reviews = action.payload;
       })
-      .addCase(postReview.fulfilled, (state, action) => {
+      .addCase(postReviewAction.fulfilled, (state, action) => {
         state.reviews = action.payload;
       });
   }

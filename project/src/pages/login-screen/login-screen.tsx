@@ -1,15 +1,18 @@
-import { FormEvent, useLayoutEffect, useRef } from 'react';
+import { datatype } from 'faker';
+import { FormEvent, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../../components/header/header';
-import { AppRoute, AuthorizationStatus } from '../../const';
+import { AppRoute, AuthorizationStatus, cities } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginAction } from '../../store/api-actions';
+import { offersData } from '../../store/offers-data/offers-data';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
 
 export default function LoginScreen(): JSX.Element {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const city = cities[datatype.number({min: 0, max: cities.length - 1})];
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -25,7 +28,7 @@ export default function LoginScreen(): JSX.Element {
     }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (authorizationStatus === AuthorizationStatus.Authorized) {
       navigate(AppRoute.Main);
     }
@@ -49,6 +52,7 @@ export default function LoginScreen(): JSX.Element {
                   placeholder="Email"
                   required
                   ref={emailRef}
+                  data-testid="email"
                 />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
@@ -60,15 +64,16 @@ export default function LoginScreen(): JSX.Element {
                   placeholder="Password"
                   required
                   ref={passwordRef}
+                  data-testid="password"
                 />
               </div>
               <button className="login__submit form__submit button" type="submit">Sign in</button>
             </form>
           </section>
           <section className="locations locations--login locations--current">
-            <div className="locations__item">
-              <Link className="locations__item-link" to="/">
-                <span>Amsterdam</span>
+            <div className="locations__item" onClick={() => dispatch(offersData.actions.changeSelectedCity(city))}>
+              <Link className="locations__item-link" to={AppRoute.Main} data-testid="city-link">
+                <span>{city}</span>
               </Link>
             </div>
           </section>

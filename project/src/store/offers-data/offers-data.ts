@@ -22,7 +22,7 @@ export const offersData = createSlice({
     changeSelectedCity: (state, action) => {
       state.city = action.payload;
     },
-    setDatsLoadingError: (state, action) => {
+    setDataLoadingError: (state, action) => {
       state.isDataLoadingError = action.payload;
     }
   },
@@ -38,10 +38,10 @@ export const offersData = createSlice({
         state.offers = action.payload;
         state.isDataLoading = false;
       })
-      .addCase(fetchOfferInfoAction.pending, (state, action) => {
+      .addCase(fetchOfferInfoAction.pending, (state) => {
         state.isDataLoadingError = false;
       })
-      .addCase(fetchOfferInfoAction.rejected, (state, action) => {
+      .addCase(fetchOfferInfoAction.rejected, (state) => {
         state.isDataLoadingError = true;
       })
       .addCase(fetchOfferInfoAction.fulfilled, (state, action) => {

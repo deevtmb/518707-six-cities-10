@@ -11,6 +11,7 @@ export default function LoadingLayout() {
         height: '100vh',
         width: '100vw'
       }}
+      data-testid="loading component"
     >
       <TailSpin color="#4481c3" height="150" width="150" />
     </div>

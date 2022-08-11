@@ -57,7 +57,7 @@ export const fetchReviewsAction = createAsyncThunk<Review[], string, {
   }
 );
 
-export const postReview = createAsyncThunk<Review[], ReviewToUpload, {
+export const postReviewAction = createAsyncThunk<Review[], ReviewToUpload, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance

@@ -1,4 +1,4 @@
-import { useLayoutEffect, MouseEvent} from 'react';
+import { useEffect, MouseEvent} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {OFFER_TYPES_MAP, AuthorizationStatus, AppRoute} from '../../const';
 import ReviewsList from '../../components/reviews-list/reviews-list';
@@ -25,7 +25,7 @@ export default function PropertyScreen(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dataLoadingError = useAppSelector(getDataLoadingError);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (id) {
       dispatch(fetchOfferInfoAction(id));
       dispatch(fetchNearbyOffersAction(id));
