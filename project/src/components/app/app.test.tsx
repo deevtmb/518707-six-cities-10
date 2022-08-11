@@ -1,45 +1,11 @@
-import { configureMockStore } from '@jedmao/redux-mock-store';
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus } from '../../const';
-import { makeFakeOffer, makeFakeOffers, makeFakeReviews } from '../../mocks/mocks';
-import thunk from 'redux-thunk';
+import { AppRoute } from '../../const';
+import { fakeStore } from '../../mocks/mocks';
 import App from './app';
-import { createAPI } from '../../services/api';
 
-const DEFAULT_CITY = 'Paris';
-const api = createAPI();
-const middlewares = [thunk.withExtraArgument(api)];
-
-const mockStore = configureMockStore(middlewares);
-const offers = makeFakeOffers();
-
-const store = mockStore({
-  USER: {
-    authorizationStatus: AuthorizationStatus.Authorized,
-    user: {
-      avatarUrl: 'string',
-      email: 'em@a.il',
-      id: 0,
-      isPro: true,
-      name: 'Max',
-      token: 'token',
-    }
-  },
-  OFFERS_DATA: {
-    city: DEFAULT_CITY,
-    offers: offers,
-    currentOfferInfo: makeFakeOffer(),
-    nearbyOffers: makeFakeOffers(),
-    favoriteOffers: makeFakeOffers(),
-    isDataLoading: false,
-    isDataLoadingError: false,
-  },
-  REVIEWS_DATA: {
-    reviews: makeFakeReviews(),
-  },
-});
+const store = fakeStore;
 
 const fakeApp = (route: string) => (
   <Provider store={store}>
