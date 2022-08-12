@@ -2,6 +2,7 @@ import {useAppSelector} from '../../hooks';
 import FavoritesList from '../../components/favorites-list/favorites-list';
 import Header from '../../components/header/header';
 import { getFavoriteOffers } from '../../store/offers-data/selectors';
+import { Link } from 'react-router-dom';
 
 export default function FavoritesScreen(): JSX.Element {
   const favoriteOffers = useAppSelector(getFavoriteOffers);
@@ -24,9 +25,9 @@ export default function FavoritesScreen(): JSX.Element {
         </div>
       </main>
       <footer className="footer container">
-        <a className="footer__logo-link" href="main.html">
+        <Link className="footer__logo-link" to="/">
           <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
-        </a>
+        </Link>
       </footer>
     </div>
   );
