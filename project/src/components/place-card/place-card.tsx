@@ -34,9 +34,9 @@ export default function PlaceCard({offer, placeType}: PlaceCardProps): JSX.Eleme
     <>
       {offer.isPremium && <div className="place-card__mark"><span>Premium</span></div>}
       <div className={`${placeType}__image-wrapper place-card__image-wrapper`}>
-        <a href="/">
+        <Link to={`${AppRoute.Offer}${offer.id}`}>
           <img className="place-card__image" src={offer.previewImage} width="260" height="200" alt={offer.title} />
-        </a>
+        </Link>
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
