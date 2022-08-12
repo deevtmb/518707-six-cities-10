@@ -29,9 +29,17 @@ export default function LoginScreen(): JSX.Element {
   };
 
   useEffect(() => {
-    if (authorizationStatus === AuthorizationStatus.Authorized) {
-      navigate(AppRoute.Main);
+    let isMounted = true;
+
+    if (isMounted) {
+      if (authorizationStatus === AuthorizationStatus.Authorized) {
+        navigate(AppRoute.Main);
+      }
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [authorizationStatus, navigate]);
 
   return (

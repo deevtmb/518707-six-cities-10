@@ -13,9 +13,17 @@ export default function HeaderUserInfo(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   useEffect(() => {
-    if (authorizationStatus === AuthorizationStatus.Authorized) {
-      dispatch(fetchFavoriteOffersAction());
+    let isMounted = true;
+
+    if (isMounted) {
+      if (authorizationStatus === AuthorizationStatus.Authorized) {
+        dispatch(fetchFavoriteOffersAction());
+      }
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [authorizationStatus, dispatch]);
 
   return (

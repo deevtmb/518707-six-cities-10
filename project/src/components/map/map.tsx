@@ -28,27 +28,43 @@ export default function Map({city, offers, additionalClass, activeOffer}: MapPro
   const map = useMap(mapRef, city);
 
   useEffect(() => {
-    if (map) {
-      offers.forEach((offer) => {
-        const marker = new Marker({
-          lat: offer.location.latitude,
-          lng: offer.location.longitude
-        });
+    let isMounted = true;
 
-        marker.setIcon(
-          activeOffer !== null && offer.id === activeOffer.id ? activeIcon : defaultIcon
-        ).addTo(map);
-      });
+    if (isMounted) {
+      if (map) {
+        offers.forEach((offer) => {
+          const marker = new Marker({
+            lat: offer.location.latitude,
+            lng: offer.location.longitude
+          });
+
+          marker.setIcon(
+            activeOffer !== null && offer.id === activeOffer.id ? activeIcon : defaultIcon
+          ).addTo(map);
+        });
+      }
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [map, offers, activeOffer]);
 
   useEffect(() => {
-    if (map) {
-      map.setView({
-        lat: city.location.latitude,
-        lng: city.location.longitude
-      }, city.location.zoom);
+    let isMounted = true;
+
+    if (isMounted) {
+      if (map) {
+        map.setView({
+          lat: city.location.latitude,
+          lng: city.location.longitude
+        }, city.location.zoom);
+      }
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [city, offers, map]);
 
   return <section className={`map ${additionalClass}`} ref={mapRef} data-testid="map"></section>;
