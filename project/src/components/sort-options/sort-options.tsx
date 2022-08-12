@@ -7,7 +7,7 @@ type SortOptionsProps = {
 }
 
 export default function SortOptions({onSortOptionClick, currentSortOption}: SortOptionsProps) {
-  const sortOptionClickHandler = (evt: MouseEvent<HTMLElement>) => {
+  const handleSortOptionClick = (evt: MouseEvent<HTMLElement>) => {
     onSortOptionClick(evt.currentTarget.innerText);
   };
 
@@ -18,7 +18,7 @@ export default function SortOptions({onSortOptionClick, currentSortOption}: Sort
           key={option}
           className={`places__option ${option === currentSortOption ? 'places__option--active' : ''}`}
           tabIndex={0}
-          onClick={sortOptionClickHandler}
+          onClick={handleSortOptionClick}
         >
           {option}
         </li>

@@ -26,10 +26,18 @@ export default function PropertyScreen(): JSX.Element {
   const dataLoadingError = useAppSelector(getDataLoadingError);
 
   useEffect(() => {
-    if (id) {
-      dispatch(fetchOfferInfoAction(id));
-      dispatch(fetchNearbyOffersAction(id));
+    let isMounted = true;
+
+    if (isMounted) {
+      if (id) {
+        dispatch(fetchOfferInfoAction(id));
+        dispatch(fetchNearbyOffersAction(id));
+      }
     }
+
+    return () => {
+      isMounted = false;
+    };
   },[id, dispatch]);
 
   if (dataLoadingError) {
@@ -42,7 +50,7 @@ export default function PropertyScreen(): JSX.Element {
     );
   }
 
-  if (currentOffer === null || !id) {
+  if (currentOffer === null) {
     return (
       <NotFoundScreen />
     );
