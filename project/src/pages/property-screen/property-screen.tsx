@@ -42,7 +42,7 @@ export default function PropertyScreen(): JSX.Element {
     );
   }
 
-  if (currentOffer === null || !id) {
+  if (currentOffer === null) {
     return (
       <NotFoundScreen />
     );
