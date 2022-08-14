@@ -14,6 +14,7 @@ import { getCurrentOfferInfo, getDataLoadingError, getNearbyOffers } from '../..
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
 
 export default function PropertyScreen(): JSX.Element {
+  const MAX_IMAGES_COUNT = 6;
   const additionalMapClass = 'property__map';
   const placesType = 'near-places';
 
@@ -79,7 +80,7 @@ export default function PropertyScreen(): JSX.Element {
         <section className="property">
           <div className="property__gallery-container container">
             <div className="property__gallery">
-              {currentOffer.images.map((image) => (
+              {currentOffer.images.slice(0, MAX_IMAGES_COUNT).map((image) => (
                 <div key={image} className="property__image-wrapper">
                   <img className="property__image" src={image} alt={currentOffer.title} />
                 </div>

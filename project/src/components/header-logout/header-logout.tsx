@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppDispatch } from '../../hooks';
-import { logoutAction } from '../../store/api-actions';
+import { fetchOffersAction, logoutAction } from '../../store/api-actions';
 
 export default function HeaderLogout(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -12,6 +12,7 @@ export default function HeaderLogout(): JSX.Element {
         onClick={(evt) => {
           evt.preventDefault();
           dispatch(logoutAction());
+          dispatch(fetchOffersAction());
         }}
         to={AppRoute.Main}
       >
