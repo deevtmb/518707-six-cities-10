@@ -1,6 +1,7 @@
 import { datatype } from 'faker';
 import { FormEvent, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Header from '../../components/header/header';
 import { AppRoute, AuthorizationStatus, cities } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -9,6 +10,7 @@ import { offersData } from '../../store/offers-data/offers-data';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
 
 export default function LoginScreen(): JSX.Element {
+  const PASSWORD_CHECK_ERROR = 'Password must contain at least one alphabetic character and one number.';
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
@@ -19,6 +21,11 @@ export default function LoginScreen(): JSX.Element {
 
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
+
+    if (passwordRef.current === null || !((/[0-9]/g).test(passwordRef.current.value) && (/[a-zA-Z]/g).test(passwordRef.current.value))) {
+      toast.warn(PASSWORD_CHECK_ERROR);
+      return;
+    }
 
     if (emailRef.current !== null && passwordRef.current !== null) {
       dispatch(loginAction({
